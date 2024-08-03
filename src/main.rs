@@ -28,7 +28,7 @@ struct Clipment {
 impl Default for Clipment {
     fn default() -> Self {
         Clipment {
-            settings: user_settings::UserSettings::default(),
+            settings: user_settings::UserSettings::load().unwrap_or_default(),
         }
     }
 }

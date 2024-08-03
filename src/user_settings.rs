@@ -4,7 +4,6 @@ use dirs::{config_dir, video_dir};
 
 use crate::utils::logger;
 
-#[allow(dead_code)] // TODO: Temporary allow, remove when used!!
 #[derive(Serialize, Deserialize)]
 pub struct UserSettings {
     videos_root_path: Option<PathBuf>,
@@ -30,7 +29,6 @@ impl Default for UserSettings {
     }
 }
 
-#[allow(dead_code)] // TODO: Temporary allow, remove when used!!
 impl UserSettings {
     pub fn save(&self) {
         logger::info("Saving settings");
@@ -82,6 +80,34 @@ impl UserSettings {
         } else {
             logger::error("Failed to determine user settings path.");
             logger::error("Settings not saved!");
+        }
+    }
+
+    pub fn load() -> Option<Self>{
+        if let Some(config) = config_dir() {
+            let config_path = config.join("clipment/settings.json");
+
+            let settings_json = match fs::read_to_string(config_path) {
+                Ok(json) => json,
+                Err(e) => {
+                    logger::error(&format!("Error while reading user settings file: {}", e));
+                    return None;
+                }
+            };
+
+            let settings: UserSettings = match serde_json::from_str(&settings_json) {
+                Ok(user_settings) => user_settings,
+                Err(e) => {
+                    logger::error("Error while reading user settings json. File might be corrupt or tampered with.");
+                    logger::error(&e.to_string());
+                    return None;
+                }
+            };
+
+            return Some(settings);
+        } else {
+            logger::error("Failed to determine user settings path.");
+            return None;
         }
     }
 }
