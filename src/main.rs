@@ -5,6 +5,8 @@ use eframe::egui;
 
 mod user_settings;
 mod utils;
+mod ui_modules;
+mod state;
 
 fn main() -> Result<(), eframe::Error> {
     utils::logger::info("App started");
@@ -22,13 +24,20 @@ fn main() -> Result<(), eframe::Error> {
 }
 
 struct Clipment {
+    state: state::State,
     settings: user_settings::UserSettings,
+    /// Temporary user settings, used for text edit fields.
+    /// When changed settings are saved, this temporary settings will be copied to real settings.
+    temp_settings: user_settings::UserSettings,
 }
 
 impl Default for Clipment {
     fn default() -> Self {
+        let settings = user_settings::UserSettings::load().unwrap_or_default();
         Clipment {
-            settings: user_settings::UserSettings::load().unwrap_or_default(),
+            state: state::State::default(),
+            settings: settings.clone(),
+            temp_settings: settings,
         }
     }
 }
@@ -41,8 +50,7 @@ impl eframe::App for Clipment {
             utils::logger::info("Closing window");
         }
 
-        egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading("Try to close the window");
-        });
+        // Show the main UI
+        ui_modules::show_main_ui(ctx, self);
     }
 }

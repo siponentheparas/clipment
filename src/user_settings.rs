@@ -4,9 +4,9 @@ use dirs::{config_dir, video_dir};
 
 use crate::utils::logger;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct UserSettings {
-    videos_root_path: Option<PathBuf>,
+    pub videos_root_path: Option<PathBuf>,
 }
 
 impl Default for UserSettings {
