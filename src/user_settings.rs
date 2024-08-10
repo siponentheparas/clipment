@@ -87,6 +87,13 @@ impl UserSettings {
         if let Some(config) = config_dir() {
             let config_path = config.join("clipment/settings.json");
 
+            if let Ok(exists) = config_path.try_exists() {
+                if !exists {
+                    logger::warning("User settings file does not exist");
+                    return None;
+                }
+            }
+
             let settings_json = match fs::read_to_string(config_path) {
                 Ok(json) => json,
                 Err(e) => {
