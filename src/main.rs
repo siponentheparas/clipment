@@ -7,6 +7,8 @@ mod user_settings;
 mod utils;
 mod ui_modules;
 mod state;
+mod cache;
+mod file;
 
 fn main() -> Result<(), eframe::Error> {
     utils::logger::info("App started");
