@@ -11,6 +11,11 @@ pub fn show_main_ui(ctx: &egui::Context, ui_data: &mut Clipment) {
 
     egui::CentralPanel::default().show(ctx, |ui| {
         ui.heading("Main content goes here! (The videos if you forgor)");
+        for video_folder in &ui_data.video_folders {
+            for video in video_folder.clone().into_iter() {
+                ui.label(video.name);
+            }
+        }
     });
 
     /* Content that should be shown on it's own window */

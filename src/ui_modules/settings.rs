@@ -24,7 +24,21 @@ pub fn show_settings_ui(ctx: &egui::Context, ui_data: &mut Clipment) {
                 }
             }
 
-            ui.add_space(20.0);
+            ui.add_space(10.0);
+
+            let clips_path = ui_data.temp_settings.clips_path.clone().unwrap_or(PathBuf::new());
+
+            ui.label("Clips folder to save clips to");
+            ui.label(format!("Path: {}", clips_path.to_string_lossy()));
+            if ui.button("Change").clicked() {
+                if let Some(path) = rfd::FileDialog::new()
+                .set_title("Change clips folder")
+                .set_directory(clips_path)
+                .pick_folder()
+                {
+                    ui_data.temp_settings.clips_path = Some(path);
+                }
+            }
 
             egui::TopBottomPanel::bottom("save_cancel").exact_height(20.0).show_inside(ui, |ui| {
                 ui.horizontal_centered(|ui| {

@@ -1,7 +1,9 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // hide console window on Windows in release
-#![allow(rustdoc::missing_crate_level_docs)] // it's an example
+
+use std::path::PathBuf;
 
 use eframe::egui;
+use file::VideoFolder;
 
 mod user_settings;
 mod utils;
@@ -31,15 +33,19 @@ struct Clipment {
     /// Temporary user settings, used for text edit fields.
     /// When changed settings are saved, this temporary settings will be copied to real settings.
     temp_settings: user_settings::UserSettings,
+    video_folders: Vec<VideoFolder>,
 }
 
 impl Default for Clipment {
     fn default() -> Self {
         let settings = user_settings::UserSettings::load().unwrap_or_default();
+        let video_root = settings.videos_root_path.clone().unwrap_or(PathBuf::new());
+        let clips_path = settings.clips_path.clone().unwrap_or(PathBuf::new());
         Clipment {
             state: state::State::default(),
             settings: settings.clone(),
             temp_settings: settings,
+            video_folders: file::read_video_folders(video_root, clips_path),
         }
     }
 }
