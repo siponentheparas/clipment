@@ -12,7 +12,8 @@ pub fn show_settings_ui(ctx: &egui::Context, ui_data: &mut Clipment) {
 
             let videos_path = ui_data.temp_settings.videos_root_path.clone().unwrap_or(PathBuf::new());
 
-            ui.label("Source video clip files location");
+            ui.label("Source video clip files location:").highlight();
+            ui.add_space(3.0);
             ui.label(format!("Path: {}", videos_path.to_string_lossy()));
             if ui.button("Change").clicked() {
                 if let Some(path) = rfd::FileDialog::new()

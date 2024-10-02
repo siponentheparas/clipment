@@ -4,6 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::utils::logger::*;
 
+pub mod thumbnail;
+
 #[derive(Serialize, Deserialize, Clone)]
 pub struct VideoFolder {
     /// Name of the collection/folder
@@ -61,9 +63,9 @@ pub fn read_video_folders(video_root: PathBuf, _clip_root: PathBuf) -> Vec<Video
 
                 let file_path = file.path();
 
-                // If file extension is not mkv then continue
+                // If file extension is not mkv or mp4 then continue
                 if let Some(extension) = file_path.extension() {
-                    if extension != "mkv" {
+                    if extension != "mkv" && extension != "mp4" {
                         continue;
                     }
                 }

@@ -23,7 +23,7 @@ fn main() -> Result<(), eframe::Error> {
     eframe::run_native(
         "Clipment",
         options,
-        Box::new(|_cc| Box::<Clipment>::default()),
+        Box::new(|_cc| Ok(Box::<Clipment>::default())),
     )
 }
 
