@@ -1,6 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // hide console window on Windows in release
 
 use std::path::PathBuf;
+use std::env;
 
 use eframe::egui;
 use file::VideoFolder;
@@ -12,7 +13,19 @@ mod state;
 mod cache;
 mod file;
 
+#[cfg(debug_assertions)]
+fn backtrace() {
+    env::set_var("RUST_BACKTRACE", "1");
+}
+
+#[cfg(not(debug_assertions))]
+fn backtrace() {
+    env::set_var("RUST_BACKTRACE", "1");
+}
+
 fn main() -> Result<(), eframe::Error> {
+    backtrace();
+
     utils::logger::info("App started");
 
     let options = eframe::NativeOptions {
