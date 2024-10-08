@@ -107,13 +107,13 @@ pub fn generate_thumbnail(video: &VideoInfo) -> VideoFrame {
     return rgb_frame;
 }
 
-pub fn save_thumbnail_to_file(frame: VideoFrame, file_path: PathBuf) {
+pub fn save_thumbnail_to_file(frame: VideoFrame, file_path: PathBuf) -> Result<PathBuf, &'static str> {
     let pixel_format = frame.format();
     info(&format!("Frame pixel format: {:?}", pixel_format));
 
     if unsafe { frame.is_empty() } {
         error("Frame is empty, something went wrong with decoding");
-        return;
+        return Err("Frame is empty");
     }
 
     // Get the frame's width, height, and stride (line size)
@@ -139,7 +139,12 @@ pub fn save_thumbnail_to_file(frame: VideoFrame, file_path: PathBuf) {
         .unwrap();
 
     // Save the image to the specified file
-    img.save(&file_path).unwrap();
-
+    if let Err(e) = img.save(&file_path) {
+        error(&format!("Failed to save image to file: {}", e));
+        return Err("Failed to save image file");
+    }
+    
     info(&format!("Saved frame as {}", file_path.to_string_lossy()));
+
+    Ok(file_path)
 }
