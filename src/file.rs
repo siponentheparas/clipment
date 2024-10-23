@@ -53,7 +53,6 @@ pub fn read_video_folders(video_root: PathBuf, _clip_root: PathBuf) -> Vec<Video
     if let Some(video_dir) = video_dir {
         for file in video_dir {
             if let Ok(file) = file {
-
                 // If entry is not a file then continue
                 if let Ok(file_type) = file.file_type() {
                     if !file_type.is_file() {
@@ -76,6 +75,11 @@ pub fn read_video_folders(video_root: PathBuf, _clip_root: PathBuf) -> Vec<Video
                         name: file_name.to_str().unwrap_or("untitled").to_string(),
                         thumbnail: PathBuf::new(),
                     };
+
+                    info(&format!(
+                        "Found video file {}",
+                        &video_info.path.as_os_str().to_string_lossy()
+                    ));
 
                     video_root_info.push(video_info);
                 }

@@ -13,17 +13,17 @@ pub fn show_main_ui(ctx: &egui::Context, ui_data: &mut Clipment) {
     egui::CentralPanel::default().show(ctx, |ui| {
         ui.heading("Main content goes here! (The videos if you forgor)");
         egui::ScrollArea::vertical()
-        .drag_to_scroll(true)
-        .show(ui, |ui| {
-            ui.set_width(ui.available_width());
-            ui.horizontal_wrapped(|ui| {
-                for video_folder in &ui_data.video_folders {
-                    for video in video_folder.clone().into_iter() {
-                        video_item::new_video_item(video, ui);
+            .drag_to_scroll(true)
+            .show(ui, |ui| {
+                ui.set_width(ui.available_width());
+                ui.horizontal_wrapped(|ui| {
+                    for video_folder in ui_data.video_folders.clone() {
+                        for video in video_folder.into_iter() {
+                            video_item::new_video_item(video, ui);
+                        }
                     }
-                }
+                });
             });
-        });
     });
 
     /* Content that should be shown on it's own window */
