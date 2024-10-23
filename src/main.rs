@@ -33,7 +33,7 @@ fn main() -> Result<(), eframe::Error> {
     utils::logger::info("App started");
 
     let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default().with_inner_size([1200.0, 625.0]),
+        viewport: egui::ViewportBuilder::default().with_inner_size([1200.0, 621.0]),
         centered: true,
         ..Default::default()
     };
@@ -78,6 +78,7 @@ impl eframe::App for Clipment {
         // Show the main UI
         ui_modules::show_main_ui(ctx, self);
 
+        // TODO: Move into a thread!
         if self.state.generating_thumb {
             for (ivf, video_folder) in self.video_folders.clone().iter().enumerate() {
                 for (iv, video) in video_folder.clone().into_iter().enumerate() {

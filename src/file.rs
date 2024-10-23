@@ -1,8 +1,7 @@
 use std::{fs, path::PathBuf};
 
-use serde::{Deserialize, Serialize};
-
 use crate::utils::logger::*;
+use serde::{Deserialize, Serialize};
 
 pub mod thumbnail;
 
