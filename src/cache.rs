@@ -6,8 +6,11 @@ use serde_json;
 use crate::file::VideoFolder;
 use crate::utils::logger::*;
 
-#[allow(dead_code)] // TODO: Remove when used
+/// Saves `VideoFolder`s into a json file in cache/clipment/video_folders.json.
+/// Return true if it's successfull. If not, returns false and logs errors into console.
 pub fn save_video_folder(video_folders: &Vec<VideoFolder>) -> bool {
+    info("Saving video folders into cache");
+
     let mut cache_file_path = if let Some(path) = cache_dir() {
         path
     } else {
@@ -56,6 +59,7 @@ pub fn save_video_folder(video_folders: &Vec<VideoFolder>) -> bool {
         return false;
     }
 
+    info("Saved video folders to cache");
     return true;
 }
 

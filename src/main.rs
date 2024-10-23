@@ -87,6 +87,9 @@ impl eframe::App for Clipment {
                     }
                 }
             }
+
+            cache::save_video_folder(&self.video_folders);
+
             self.state.generating_thumb = false;
         }
     }
