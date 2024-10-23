@@ -1,6 +1,7 @@
 // Struct to keep track of which ui modules to show and stuff
 pub struct State {
     // TODO: Make state save/loadable
+    // TODO: Figure out why ^^
     // UI modules
     pub settings_ui: bool,
 
