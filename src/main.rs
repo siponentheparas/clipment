@@ -24,7 +24,7 @@ fn backtrace() {
 
 #[cfg(not(debug_assertions))]
 fn backtrace() {
-    env::set_var("RUST_BACKTRACE", "1");
+    env::set_var("RUST_BACKTRACE", "1"); // Set to "0"?
 }
 
 fn main() -> Result<(), eframe::Error> {
@@ -62,13 +62,16 @@ impl Default for Clipment {
             state: state::State::default(),
             settings: settings.clone(),
             temp_settings: settings,
-            video_folders: file::read_video_folders(video_root, clips_path),
+            video_folders: cache::load_video_folder()
+                .unwrap_or(file::read_video_folders(video_root, clips_path)),
         }
     }
 }
 
 impl eframe::App for Clipment {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        egui_extras::install_image_loaders(ctx);
+
         // Do stuff when window close is requested
         if ctx.input(|i| i.viewport().close_requested()) {
             self.settings.save();
@@ -82,8 +85,12 @@ impl eframe::App for Clipment {
         if self.state.generating_thumb {
             for (ivf, video_folder) in self.video_folders.clone().iter().enumerate() {
                 for (iv, video) in video_folder.clone().into_iter().enumerate() {
-                    if let Some(path) = generate_thumbnail(video) {
-                        self.video_folders[ivf].videos[iv].thumbnail = path;
+                    if !video.thumbnail.exists() {
+                        if let Some(path) = generate_thumbnail(video) {
+                            self.video_folders[ivf].videos[iv].thumbnail = path;
+                        }
+                    } else {
+                        utils::logger::info(&format!("Thumbnail for {} already exists", video.name));
                     }
                 }
             }
